@@ -1,0 +1,4 @@
+FOLLOWER_ICON = "👥"
+MODELS_ICON = "🛠"
+TOP_3_MODELS_ICON = "🏆"
+BULLET_LIST_ICON = "    •"
