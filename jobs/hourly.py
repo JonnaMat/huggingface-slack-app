@@ -1,15 +1,13 @@
 import logging
+
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from persistence.subscription_store import SubscriptionStore
+from schemas.hf import OrganizationStatistics, ModelStatistics
 from schemas.icons import (
-    TOP_3_MODELS_ICON,
-    MODELS_ICON,
-    FOLLOWER_ICON,
     BULLET_LIST_ICON,
 )
 from services.hf import HFService
-from schemas.hf import OrganizationStatistics, ModelStatistics
 from services.milestones import crossed_milestone
 
 
@@ -33,13 +31,20 @@ def model_updates(
 
     if download_milestone and likes_milestone:
         message = (
-            f":tada: `{repo_id}` crossed {download_milestone:,} downloads and {likes_milestone:,} likes! "
+            f":tada: `{repo_id}` crossed {download_milestone:,} downloads and "
+            f"{likes_milestone:,} likes! "
             f"({new_stats.stats_str()})"
         )
     elif download_milestone:
-        message = f":tada: `{repo_id}` crossed {download_milestone:,} downloads! ({new_stats.stats_str()})"
+        message = (
+            f":tada: `{repo_id}` crossed "
+            f"{download_milestone:,} downloads! ({new_stats.stats_str()})"
+        )
     elif likes_milestone:
-        message = f":heart: `{repo_id}` crossed {likes_milestone:,} likes! ({new_stats.stats_str()})"
+        message = (
+            f":heart: `{repo_id}` crossed {likes_milestone:,} likes! ("
+            f"{new_stats.stats_str()})"
+        )
     if message:
         app.client.chat_postMessage(channel=channel_id, text=message)
 
@@ -54,9 +59,12 @@ def _organization_followers_updates(
 
     old_followers = old_stats.num_followers
     new_followers = new_stats.num_followers
-    follower_increase = new_followers - old_followers
 
-    if follower_increase > 0:
+    followers_milestone = crossed_milestone(
+        old_followers, new_followers, strategy="followers"
+    )
+
+    if followers_milestone:
 
         added_followers = []
         if new_stats.followers and old_stats.followers:
@@ -65,15 +73,18 @@ def _organization_followers_updates(
             for follower in new_stats.followers:
                 if str(follower) not in old_followers:
                     added_followers.append(str(follower))
-
-        message = (
-            f":partying_face: `{repo_id}` gained *{follower_increase} new follower"
-        )
-        if follower_increase > 1:
-            message += f"s*!\n{BULLET_LIST_ICON} "
-            message += f"\n{BULLET_LIST_ICON} ".join(added_followers)
+        if len(added_followers) == 1:
+            message = (
+                f":partying_face: `{repo_id}` gained 1 new follower "
+                f"({new_followers}): {added_followers[0]}!"
+            )
         else:
-            message += f":* {added_followers[0]}"
+            message = (
+                f":partying_face: `{repo_id}` crossed "
+                f"{followers_milestone:,} followers ({new_followers})!\n"
+                f"{BULLET_LIST_ICON} "
+            )
+            message += f"\n{BULLET_LIST_ICON} ".join(added_followers)
 
         app.client.chat_postMessage(channel=channel_id, text=message)
 
@@ -106,8 +117,10 @@ def _organization_models_updates(
 
         if new_models:
             message += (
-                "\nSubscribe to new models: ```\hf subscribe "
-                + "\n\hf subscribe ".join(model.repo_id for model in new_models)
+                "\nSubscribe to new model"
+                f"{'s' if len(new_models) > 1 else ''}: "
+                "```/hf subscribe "
+                + "\n/hf subscribe ".join(model.repo_id for model in new_models)
                 + "\n```"
             )
 
@@ -125,17 +138,25 @@ def _organization_top_models_updates(
     old_top = [model for model in old_stats.top_three_models]
     new_top = [model for model in new_stats.top_three_models]
 
-    if old_top != new_top:
+    if any(
+        old_model.repo_id != new_model.repo_id
+        for old_model, new_model in zip(
+            old_stats.top_three_models, new_stats.top_three_models
+        )
+    ):
         message = f"🏆 `{repo_id}` *Top Models updated*"
 
         for idx, new_model in enumerate(new_top):
             if len(old_top) > idx:
                 if old_top[idx].repo_id == new_model.repo_id:
-                    message += f"\n    {idx+1}. {new_model.minimal_str()}"
+                    message += f"\n    {idx + 1}. {new_model.minimal_str()}"
                 else:
-                    message += f"\n    {idx+1}. ~`{old_top[idx].repo_id}`~ -> {new_model.minimal_str()}"
+                    message += (
+                        f"\n    {idx + 1}. ~`{old_top[idx].repo_id}`~ "
+                        f"-> {new_model.minimal_str()}"
+                    )
             else:
-                message += f"\n    {idx+1}. {new_model.minimal_str()}"
+                message += f"\n    {idx + 1}. {new_model.minimal_str()}"
 
         app.client.chat_postMessage(channel=channel_id, text=message)
 
@@ -189,18 +210,7 @@ def start_hourly_scheduler(app):
     scheduler.add_job(
         lambda: check_for_updates(app),
         trigger="interval",
-        seconds=30,
-    )
-    scheduler.start()
-    return scheduler
-
-
-def start_hourly_scheduler_later(app):
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(
-        lambda: check_for_updates(app),
-        trigger="cron",
-        minute="0",
+        minutes=45,
     )
     scheduler.start()
     return scheduler

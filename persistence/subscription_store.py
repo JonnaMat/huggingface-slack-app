@@ -11,7 +11,7 @@ def _today_key():
     return datetime.now().strftime("%Y-%m-%d")
 
 
-DATABASE_FILE = "/home/jonna/src/huggingface-slack-app/database.json"  # os.environ.get("SLACK_APP_TOKEN")
+DATABASE_FILE = "/home/jonna/src/huggingface-slack-app/database.json"  # os.environ.get("SLACK_HF_DATABASE")
 
 
 class SubscriptionStore:
