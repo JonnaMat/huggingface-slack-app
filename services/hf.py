@@ -5,7 +5,10 @@ from schemas.hf import ModelStatistics, OrganizationStatistics, User
 
 class HFService:
     def __init__(self):
-        self.api = HfApi()
+        self.api = HfApi(
+            # fake token to ensure only public models get fetched
+            token="hf_dnw"
+        )
 
     def get_model_statistics(self, repo_id: str) -> ModelStatistics:
         model_info = self.api.model_info(repo_id)
