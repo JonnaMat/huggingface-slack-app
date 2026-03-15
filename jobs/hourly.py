@@ -78,12 +78,19 @@ def _organization_followers_updates(
                 f":partying_face: `{repo_id}` gained 1 new follower "
                 f"({new_followers}): {added_followers[0]}!"
             )
+        elif len(added_followers) == 0:
+            message = (
+                f":partying_face: `{repo_id}` crossed "
+                f"{followers_milestone:,} followers ({new_followers:,})!"
+            )
         else:
             message = (
                 f":partying_face: `{repo_id}` crossed "
-                f"{followers_milestone:,} followers ({new_followers})!\n"
-                f"{BULLET_LIST_ICON} "
+                f"{followers_milestone:,} followers "
+                f"{'({new_followers:,})' if followers_milestone != new_followers else ''}"
+                f"!"
             )
+            message += f"\n{BULLET_LIST_ICON} "
             message += f"\n{BULLET_LIST_ICON} ".join(added_followers)
 
         app.client.chat_postMessage(channel=channel_id, text=message)
