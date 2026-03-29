@@ -8,6 +8,7 @@ from persistence.subscription_store import (
     WeeklyStatsStore,
 )
 from schemas.hf import OrganizationStatistics
+from schemas.icons import DOWNLOAD_ICON, FOLLOWER_ICON, MODELS_ICON
 
 
 def get_week_number() -> str:
@@ -46,9 +47,9 @@ def generate_digest(app):
 
     for repo_id, data in org_digests.items():
         message = f"*Weekly Digest for* `{repo_id}` ({get_week_number()})\n\n"
-        message += f":chart_with_upwards_trend: Downloads this week: {data['weekly_downloads']:,}\n"
-        message += f"👥 New Followers: +{data['added_followers']:,}\n"
-        message += f"🛠 New Models: +{data['released_models']:,}"
+        message += f"{DOWNLOAD_ICON} Downloads this week: {data['weekly_downloads']:,}\n"
+        message += f"{FOLLOWER_ICON} New Followers: +{data['added_followers']:,}\n"
+        message += f"{MODELS_ICON} New Models: +{data['released_models']:,}"
         app.client.chat_postMessage(channel=data["channel_id"], text=message)
 
 
@@ -57,7 +58,7 @@ def start_weekly_scheduler(app):
     scheduler.add_job(
         lambda: generate_digest(app),
         trigger="cron",
-        day_of_week="mon",
+        day_of_week="fri",
         hour=9,
         minute=0,
     )
