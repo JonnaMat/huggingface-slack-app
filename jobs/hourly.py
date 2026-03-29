@@ -217,7 +217,7 @@ def start_hourly_scheduler(app):
     scheduler.add_job(
         lambda: check_for_updates(app),
         trigger="interval",
-        minutes=1,
+        minutes=60,
     )
     scheduler.start()
     return scheduler
