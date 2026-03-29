@@ -53,16 +53,16 @@ class HFService:
             else []
         )
 
+        all_models = list(self.api.list_models(author=repo_id, sort="downloads", limit=100))
         top_three_models = [
             ModelStatistics(
                 repo_id=model_info.id,
                 downloads=model_info.downloads,
                 likes=model_info.likes,
             )
-            for model_info in self.api.list_models(
-                author=repo_id, sort="downloads", limit=3, full=False
-            )
+            for model_info in all_models[:3]
         ]
+        total_downloads = sum(model_info.downloads or 0 for model_info in all_models)
 
         return OrganizationStatistics(
             repo_id=repo_id,
@@ -70,4 +70,5 @@ class HFService:
             num_followers=num_followers,
             num_models=num_models,
             top_three_models=top_three_models,
+            total_downloads=total_downloads,
         )

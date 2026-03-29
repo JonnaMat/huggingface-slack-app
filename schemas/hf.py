@@ -2,8 +2,6 @@ from dataclasses import dataclass, field
 
 from dataclasses_json import dataclass_json
 
-from schemas.icons import TOP_3_MODELS_ICON
-
 
 @dataclass_json
 @dataclass
@@ -36,7 +34,6 @@ class User:
         return f"{self.username} ({self.fullname})"
 
     def __str__(self) -> str:
-
         if self.organizations:
             orgs = ", ".join(self.organizations)
             return f"{self._name()} @ {orgs}"
@@ -52,6 +49,7 @@ class OrganizationStatistics:
     followers: list[User] = field(default_factory=list)
     num_followers: int = 0
     num_models: int = 0
+    total_downloads: int = 0
 
     def __str__(self):
         followers_count = (
@@ -63,9 +61,9 @@ class OrganizationStatistics:
 
         if self.top_three_models:
             organization_str += "\n\n"
-            organization_str += f"*🏆 Top Models*"
+            organization_str += "*🏆 Top Models*"
             for idx, model in enumerate(self.top_three_models):
-                organization_str += f"\n    {idx+1}. {model.minimal_str()}️"
+                organization_str += f"\n    {idx + 1}. {model.minimal_str()}️"
 
         return organization_str
 

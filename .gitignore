@@ -39,4 +39,5 @@ logs/
 .pytype/
 .idea/
 database.json
+weekly_stats.json
 uv.lock

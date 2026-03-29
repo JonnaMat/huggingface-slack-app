@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg?download=true" width="100px" alt="HuggingFace Slack Bot" />
-  <h1 style="font-size: 28px; margin: 10px 0;">HuggingFace Slack Bot</h1>
+  <h1 style="font-size: 28px; margin: 10px 0;">HuggingFace Slack App</h1>
   <p>Get real-time milestone notifications for Hugging Face models and organizations directly in your Slack channels!</p>
 </div>
 
@@ -96,6 +96,7 @@ Track their new model drops or download spikes... 👀 Sometimes even before the
 | **🔌 Socket Mode**                | Runs entirely via Slack Socket Mode — no public URL needed.                                  |
 | **💾 Persistent Subscriptions**   | Subscriptions survive bot restarts via JSON file storage.                                    |
 | **🔒 Thread-Safe Storage**        | File locking prevents data corruption in concurrent scenarios.                               |
+| **📊 Weekly Digest**              | Weekly summary with total downloads, new followers, and new models every Friday.             |
 
 ---
 
@@ -217,13 +218,15 @@ huggingface-slack-app/
 ├── requirements.txt                # Python dependencies
 ├── pyproject.toml                  # Project config (ruff, pytest)
 ├── database.json                   # Subscription & stats persistence
+├── weekly_stats.json               # Weekly stats (downloads, followers, models)
 │
 ├── listeners/                      # Slack event handlers
 │   └── commands/
 │       └── hf.py                   # /hf slash command handler
 │
 ├── jobs/                           # Scheduled background jobs
-│   └── hourly.py                   # Hourly update checker & notifier
+│   ├── hourly.py                   # Hourly update checker & notifier
+│   └── weekly_digest.py            # Weekly digest generator (Mondays 9am)
 │
 ├── services/                       # Business logic layer
 │   ├── hf.py                       # HuggingFace Hub API integration
@@ -234,7 +237,7 @@ huggingface-slack-app/
 │   └── icons.py                    # Emoji constants for messages
 │
 ├── persistence/                    # Data storage layer
-    └── subscription_store.py       # JSON file storage with FileLock
+│   └── subscription_store.py       # JSON file storage with FileLock
 ```
 
 ---
@@ -243,10 +246,8 @@ huggingface-slack-app/
 
 | Feature                                                                           | Status        |
 |-----------------------------------------------------------------------------------|---------------|
-| **Daily/weekly digest** — aggregated summary messages instead of individual pings | ⏳ In Progress |
 | **Per-channel settings** — configure which milestone types a channel receives     | 🏗️ Planned   |
 | **Leaderboard commands** — `/hf top` to see trending models                       | 🏗️ Planned   |
-| **Adaptive polling** — more frequent checks for fast-growing models               | 🏗️ Planned   |
 | **Database backend** — swap JSON storage for PostgreSQL/SQLite                    | 🏗️ Planned   |
 
 Want a feature? [Open an issue](https://github.com/your-username/huggingface-slack-app/issues/new)!

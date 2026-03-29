@@ -2,7 +2,7 @@ import logging
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from persistence.subscription_store import SubscriptionStore
+from persistence.subscription_store import SubscriptionStore, WeeklyStatsStore
 from schemas.hf import OrganizationStatistics, ModelStatistics
 from schemas.icons import (
     BULLET_LIST_ICON,
@@ -185,6 +185,7 @@ def organization_updates(
 
 def check_for_updates(app):
     store = SubscriptionStore()
+    weekly_store = WeeklyStatsStore()
     hf_service = HFService()
 
     with store.lock:
@@ -199,9 +200,9 @@ def check_for_updates(app):
                 try:
                     if isinstance(old_stats, OrganizationStatistics):
                         new_stats = hf_service.get_organization_statistics(repo_id)
-                        organization_updates(
-                            app, channel_id, hf_service, old_stats, new_stats
-                        )
+                        weekly_store.record_followers(repo_id, new_stats.num_followers)
+                        weekly_store.record_downloads(repo_id, new_stats.total_downloads)
+                        organization_updates(app, channel_id, hf_service, old_stats, new_stats)
                     else:
                         new_stats = hf_service.get_model_statistics(repo_id)
                         model_updates(app, channel_id, old_stats, new_stats)
