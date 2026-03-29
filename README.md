@@ -28,7 +28,11 @@ This Slack bot lets your team **subscribe to any Hugging Face model or organizat
 
 ---
 
-## 📸 Screenshots
+## 📸 Demo
+
+<p align="center">
+   <img src="docs/assets/demo.gif" width="50%">
+</p>
 
 ### Subscribe to a model with a single command
 
