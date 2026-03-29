@@ -1,14 +1,24 @@
-# 🤗 HuggingFace Slack Bot
+<div align="center">
+  <img src="https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg?download=true" width="100px" alt="HuggingFace Slack Bot" />
+  <h1 style="font-size: 28px; margin: 10px 0;">HuggingFace Slack Bot</h1>
+  <p>Get real-time milestone notifications for Hugging Face models and organizations directly in your Slack channels!</p>
+</div>
 
-> Get real-time milestone notifications for Hugging Face models and organizations directly in your Slack channels.
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT">
+    <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+  <a href="https://tools.slack.com/automation">
+    <img alt="Slack Bolt" src="https://img.shields.io/badge/Slack%20Bolt-1.27.0-purple.svg" />
+  </a>
+  <a href="https://www.python.org/">
+    <img alt="Python" src="https://img.shields.io/badge/Python-3.9+-blue.svg" />
+  </a>
+  <a href="https://huggingface.co/docs/hub">
+    <img alt="HuggingFace Hub" src="https://img.shields.io/badge/HuggingFace%20Hub-latest-orange.svg" />
+  </a>
+</p>
 
-<!-- ALL-CONTRIBUTORS-BADGE:START -->
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
-[![Slack Bolt](https://img.shields.io/badge/Slack%20Bolt-1.27.0-purple.svg)](https://tools.slack.com/automation)
-[![HuggingFace Hub](https://img.shields.io/badge/HuggingFace%20Hub-latest-orange.svg)](https://huggingface.co/docs/hub)
 
 ---
 
