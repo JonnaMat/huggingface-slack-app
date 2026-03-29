@@ -67,15 +67,18 @@ Stay on top of the ML ecosystem without leaving your workflow.
 
 ---
 
-
-
 ## 🎯 Use Cases & Features
 
-**Team Culture:** Automatically celebrate when your model hits 1k, 10k, or 50k downloads.
+💡 Building in AI is hard work. In our team, we used to celebrate "small wins"—like reaching a download milestone or 
+successfully pushing a new model—by sharing screenshots in Slack.
+I built this app to automate that celebration and turn static screenshots into a live, interactive "playground." 
+It's designed to keep team spirit high and make AI development a collaborative social experience.
 
-**Release Monitoring:** Get a notification the second a new model is pushed to your organization's namespace.
-
-**🕵️ Market Intelligence:** It’s not just for your own wins. You can use it to keep a pulse on what other organizations are up to. 
+> **Team Culture:** Automatically celebrate when your model hits 1k, 10k, or 50k downloads.
+>
+> **Release Monitoring:** Get a notification the second a new model is pushed to your organization's namespace.
+>
+> **🕵️ Market Intelligence:** It’s not just for your own wins. You can use it to keep a pulse on what other organizations are up to. 
 Track their new model drops or download spikes... 👀 Sometimes even before the official announcement.
 
 ### Available Now
