@@ -24,7 +24,9 @@
 
 ## ✨ What does it do?
 
-This Slack bot lets your team **subscribe to any Hugging Face model or organization** and receive automatic milestone notifications — downloads, likes, new followers, new models — right in your Slack channels. Stay on top of the ML ecosystem without leaving your workflow.
+This Slack bot lets your team **subscribe to any Hugging Face model or organization** and receive automatic milestone 
+notifications — downloads, likes, new followers, new models — right in your Slack channels. 
+Stay on top of the ML ecosystem without leaving your workflow.
 
 ---
 
