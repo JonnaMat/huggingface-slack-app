@@ -1,97 +1,281 @@
-# Bolt for Python Template App
+# 🤗 HuggingFace Slack Bot
 
-This is a generic Bolt for Python template app used to build out Slack apps.
+> Get real-time milestone notifications for Hugging Face models and organizations directly in your Slack channels.
 
-Before getting started, make sure you have a development workspace where you have permissions to install apps. If you don’t have one setup, go ahead and [create one](https://slack.com/create).
-## Installation
+<!-- ALL-CONTRIBUTORS-BADGE:START -->
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-#### Create a Slack App
-1. Open [https://api.slack.com/apps/new](https://api.slack.com/apps/new) and choose "From an app manifest"
-2. Choose the workspace you want to install the application to
-3. Copy the contents of [manifest.json](./manifest.json) into the text box that says `*Paste your manifest code here*` (within the JSON tab) and click *Next*
-4. Review the configuration and click *Create*
-5. Click *Install to Workspace* and *Allow* on the screen that follows. You'll then be redirected to the App Configuration dashboard.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Slack Bolt](https://img.shields.io/badge/Slack%20Bolt-1.27.0-purple.svg)](https://tools.slack.com/automation)
+[![HuggingFace Hub](https://img.shields.io/badge/HuggingFace%20Hub-latest-orange.svg)](https://huggingface.co/docs/hub)
 
-#### Environment Variables
-Before you can run the app, you'll need to store some environment variables.
+---
 
-1. Open your apps configuration page from this list, click **OAuth & Permissions** in the left hand menu, then copy the Bot User OAuth Token. You will store this in your environment as `SLACK_BOT_TOKEN`.
-2. Click ***Basic Information** from the left hand menu and follow the steps in the App-Level Tokens section to create an app-level token with the `connections:write` scope. Copy this token. You will store this in your environment as `SLACK_APP_TOKEN`.
+## ✨ What does it do?
 
-```zsh
-# Replace with your app token and bot token
-export SLACK_BOT_TOKEN=<your-bot-token>
-export SLACK_APP_TOKEN=<your-app-token>
+This Slack bot lets your team **subscribe to any Hugging Face model or organization** and receive automatic milestone notifications — downloads, likes, new followers, new models — right in your Slack channels. Stay on top of the ML ecosystem without leaving your workflow.
+
+---
+
+## 📸 Screenshots
+
+### Subscribe to a model with a single command
+
+<!-- screenshot: subscribe-command.png -->
+![Subscribe to a model](docs/assets/hf_subscribe.png)
+
+*Subscribe any model or organization to a channel with `/hf subscribe`.*
+
+---
+
+### Receive milestone notifications automatically
+
+<!-- screenshot: milestone-notification.png -->
+![Milestone notification](docs/assets/hf_download_milestone.png)
+
+*The bot posts rich, formatted messages when models cross download, like, or follower milestones.*
+
+---
+
+### Track organization activity
+
+<!-- screenshot: model-release.png -->
+![New model release](docs/assets/hf_model_release.png)
+
+
+<!-- screenshot: org-updates.png -->
+![Organization updates](docs/assets/hf_org_update.png)
+
+*Get notified about new models, follower growth, and top model ranking changes for entire organizations.*
+
+---
+
+## 🎯 Features
+
+### Available Now
+
+| Feature                           | Description                                                                                  |
+|-----------------------------------|----------------------------------------------------------------------------------------------|
+| **📦 Model Subscriptions**        | Subscribe any Slack channel to any Hugging Face model by ID.                                 |
+| **🏢 Organization Subscriptions** | Subscribe to an entire organization and track all activity.                                  |
+| **📈 Download Milestones**        | Automatic notifications at 100, 500, 1k, 2k, 5k, 10k, 15k, 20k, 30k+ downloads.              |
+| **❤️ Like Milestones**            | Automatic notifications at 5, 10, 50, 100, 250, 500, 750, 1k+ likes.                         |
+| **👥 New Follower Alerts**        | Get notified when organizations gain new followers, with names and associated organizations. |
+| **🆕 New Model Alerts**           | Real-time notifications when organizations release new models.                               |
+| **🏆 Top Model Rankings**         | Track ranking changes in an org's top 3 models by downloads (last 30d).                      |
+| **⏰ On-Demand Stats**             | Run `/hf now` to get current stats for all subscriptions instantly.                          |
+| **🔌 Socket Mode**                | Runs entirely via Slack Socket Mode — no public URL needed.                                  |
+| **💾 Persistent Subscriptions**   | Subscriptions survive bot restarts via JSON file storage.                                    |
+| **🔒 Thread-Safe Storage**        | File locking prevents data corruption in concurrent scenarios.                               |
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+
+- Python **3.9+**
+- A Slack workspace with permissions to install apps
+- A Slack app created at [api.slack.com/apps](https://api.slack.com/apps)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/huggingface-slack-app.git
+cd huggingface-slack-app
 ```
 
-### Setup Your Local Project
-```zsh
-# Clone this project onto your machine
-git clone https://github.com/slack-samples/bolt-python-starter-template.git
+### 2. Set up a virtual environment
 
-# Change into this project directory
-cd bolt-python-starter-template
+**Option A: With uv (recommended)**
 
-# Setup your python virtual environment
+[uv](https://github.com/astral-sh/uv) is a fast Python package manager that handles environments automatically:
+
+```bash
+# Install uv if you don't have it
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Run directly - uv creates a virtual environment automatically
+uv run python app.py
+```
+
+**Option B: Traditional**
+
+```bash
 python3 -m venv .venv
-source .venv/bin/activate
-
-# Install the dependencies
+source .venv/bin/activate   # Linux/macOS
+# .venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 
-# Start your local server
 python3 app.py
 ```
 
-#### Linting
-```zsh
-# Run ruff from root directory for linting
-ruff check .
+### 4. Create a Slack App
 
-# Run ruff from root directory for code formatting
-ruff format .
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) and click **Create New App** → **From an app manifest**.
+2. Select your workspace and paste the contents of [`manifest.json`](manifest.json).
+3. Review and create the app.
+4. Navigate to **Basic Information** → **App Icon** and upload `docs/assets/hf_logo.png` as the icon.
+5. Navigate to **Install App** and install the app to your workspace.
+
+### 5. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```bash
+SLACK_BOT_TOKEN=xoxb-your-bot-token-here
+SLACK_APP_TOKEN=xapp-your-app-level-token-here
 ```
 
-#### Testing
-```zsh
-# Run pytest from root directory for unit testing
-pytest .
+> **Security note:** Never commit your `.env` file or tokens to version control. The project includes a `.gitignore`.
+
+### 6. Run the bot
+
+```bash
+python3 app.py
 ```
 
-## Project Structure
-
-### `manifest.json`
-
-`manifest.json` is a configuration for Slack apps. With a manifest, you can create an app with a pre-defined configuration, or adjust the configuration of an existing app.
-
-### `app.py`
-
-`app.py` is the entry point for the application and is the file you'll run to start the server. This project aims to keep this file as thin as possible, primarily using it as a way to route inbound requests.
-
-### `/listeners`
-
-Every incoming request is routed to a "listener". Inside this directory, we group each listener based on the Slack Platform feature used, so `/listeners/shortcuts` handles incoming [Shortcuts](https://api.slack.com/interactivity/shortcuts) requests, `/listeners/views` handles [View submissions](https://api.slack.com/reference/interaction-payloads/views#view_submission) and so on.
-
-## App Distribution / OAuth
-
-Only implement OAuth if you plan to distribute your application across multiple workspaces. A separate `app_oauth.py` file can be found with relevant OAuth settings.
-
-When using OAuth, Slack requires a public URL where it can send requests. In this template app, we've used [`ngrok`](https://ngrok.com/download). Checkout [this guide](https://ngrok.com/docs#getting-started-expose) for setting it up.
-
-Start `ngrok` to access the app on an external network and create a redirect URL for OAuth. 
+You should see:
 
 ```
-ngrok http 3000
+⚡ Bolt app is running on Socket Mode!
 ```
 
-This output should include a forwarding address for `http` and `https` (we'll use `https`). It should look something like the following:
+### 7. Invite the bot to a channel
+
+In Slack, run:
 
 ```
-Forwarding   https://3cb89939.ngrok.io -> http://localhost:3000
+/invite @HuggingFace
 ```
 
-Navigate to **OAuth & Permissions** in your app configuration and click **Add a Redirect URL**. The redirect URL should be set to your `ngrok` forwarding address with the `slack/oauth_redirect` path appended. For example:
+Then subscribe to a model:
 
 ```
-https://3cb89939.ngrok.io/slack/oauth_redirect
+/hf subscribe meta-llama/Llama-3-8B-Instruct
 ```
+
+---
+
+## 📖 Usage
+
+All interaction happens through the `/hf` slash command in any channel where the bot is present.
+
+```
+/hf subscribe <model/org>     Subscribe to a model or organization
+/hf unsubscribe <model/org>   Unsubscribe from updates
+/hf now                       Get current stats for all subscriptions
+```
+
+**Examples:**
+
+```
+/hf subscribe meta-llama/Llama-3-8B-Instruct
+/hf subscribe microsoft
+/hf subscribe stabilityai/stable-diffusion-3-medium
+/hf unsubscribe meta-llama/Llama-3-8B-Instruct
+/hf now
+```
+
+---
+
+## 🔧 Project Structure
+
+```
+huggingface-slack-app/
+├── app.py                          # Application entry point
+├── manifest.json                   # Slack app manifest
+├── requirements.txt                # Python dependencies
+├── pyproject.toml                  # Project config (ruff, pytest)
+├── database.json                   # Subscription & stats persistence
+│
+├── listeners/                      # Slack event handlers
+│   └── commands/
+│       └── hf.py                   # /hf slash command handler
+│
+├── jobs/                           # Scheduled background jobs
+│   └── hourly.py                   # Hourly update checker & notifier
+│
+├── services/                       # Business logic layer
+│   ├── hf.py                       # HuggingFace Hub API integration
+│   └── milestones.py               # Milestone detection engine
+│
+├── schemas/                        # Data models
+│   ├── hf.py                       # ModelStatistics, OrganizationStatistics, User
+│   └── icons.py                    # Emoji constants for messages
+│
+├── persistence/                    # Data storage layer
+    └── subscription_store.py       # JSON file storage with FileLock
+```
+
+---
+
+## 🛤️ Coming Features
+
+| Feature                                                                           | Status        |
+|-----------------------------------------------------------------------------------|---------------|
+| **Daily/weekly digest** — aggregated summary messages instead of individual pings | ⏳ In Progress |
+| **Per-channel settings** — configure which milestone types a channel receives     | 🏗️ Planned   |
+| **Leaderboard commands** — `/hf top` to see trending models                       | 🏗️ Planned   |
+| **Adaptive polling** — more frequent checks for fast-growing models               | 🏗️ Planned   |
+| **Database backend** — swap JSON storage for PostgreSQL/SQLite                    | 🏗️ Planned   |
+
+Want a feature? [Open an issue](https://github.com/your-username/huggingface-slack-app/issues/new)!
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get started:
+
+### Development Setup
+
+```bash
+# Clone and set up
+git clone https://github.com/your-username/huggingface-slack-app.git
+cd huggingface-slack-app
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# Copy env and fill in your tokens
+cp .env.example .env   # (or create .env manually)
+```
+
+### Workflow
+
+1. **Fork** the repository and create a branch:
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
+
+2. **Make your changes.** Follow the existing code style (enforced by `ruff`).
+
+3. **Test any new functionality.**
+
+4. **Commit** with a clear message:
+   ```bash
+   git commit -m "feat: add support for daily digest mode"
+   ```
+
+5. **Push** and open a Pull Request.
+
+### Guidelines
+
+- Keep pull requests focused and small — one feature or fix per PR.
+- Run `ruff check . && ruff format .` before committing.
+- Update this README if you add user-facing features.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgements
+
+- [Slack Bolt](https://tools.slack.com/automation) — the Python framework that powers this app
+- [HuggingFace Hub](https://huggingface.co/docs/hub) — for the API that makes this all possible
+- All contributors who help improve this project

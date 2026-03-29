@@ -1,3 +1,9 @@
+slack-bolt==1.27.0
+huggingface-hub==1.8.0
+APScheduler==3.11.2
+filelock==3.25.2
+dataclasses-json==0.6.7
+python-dotenv==1.2.2
+
 pytest==9.0.2
 ruff==0.9.4
-slack-bolt==1.27.0
