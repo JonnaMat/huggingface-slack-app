@@ -38,3 +38,5 @@ logs/
 *.db
 .pytype/
 .idea/
+database.json
+uv.lock
