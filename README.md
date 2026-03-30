@@ -126,7 +126,7 @@ cd huggingface-slack-app
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Run directly - uv creates a virtual environment automatically
-uv run python app.py
+uv run --with-requirements requirements.txt python app.py
 ```
 
 **Option B: Traditional**
