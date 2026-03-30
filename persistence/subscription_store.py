@@ -15,8 +15,9 @@ def _week_key():
     return (datetime.now() - timedelta(days=datetime.now().weekday())).strftime("%Y-W%W")
 
 
-DATABASE_FILE = "/home/jonna/src/huggingface-slack-app/database.json"
-WEEKLY_STATS_FILE = "/home/jonna/src/huggingface-slack-app/weekly_stats.json"
+_BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_FILE = _BASE_DIR / "database.json"
+WEEKLY_STATS_FILE = _BASE_DIR / "weekly_stats.json"
 
 
 class SubscriptionStore:
