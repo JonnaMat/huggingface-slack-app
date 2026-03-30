@@ -195,6 +195,7 @@ All interaction happens through the `/hf` slash command in any channel where the
 /hf subscribe <model/org>     Subscribe to a model or organization
 /hf unsubscribe <model/org>   Unsubscribe from updates
 /hf now                       Get current stats for all subscriptions
+/hf data                      Upload data files (database.json, weekly_stats.json) to the channel
 ```
 
 **Examples:**
@@ -205,6 +206,7 @@ All interaction happens through the `/hf` slash command in any channel where the
 /hf subscribe stabilityai/stable-diffusion-3-medium
 /hf unsubscribe meta-llama/Llama-3-8B-Instruct
 /hf now
+/hf data
 ```
 
 ---

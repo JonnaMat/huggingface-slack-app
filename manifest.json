@@ -20,7 +20,7 @@
           {
               "command": "/hf",
               "description": "Runs HuggingFace command",
-              "usage_hint": "subscribe <model/org> | unsubscribe <model/org> | now",
+              "usage_hint": "subscribe <model/org> | unsubscribe <model/org> | now | data",
               "should_escape": false
           }
       ]
@@ -30,7 +30,8 @@
           "bot": [
               "channels:history",
               "chat:write",
-              "commands"
+              "commands",
+              "files:write"
           ]
       }
   },

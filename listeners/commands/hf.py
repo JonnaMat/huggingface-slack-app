@@ -1,12 +1,27 @@
-from persistence.subscription_store import SubscriptionStore
+from persistence.subscription_store import SubscriptionStore, DATABASE_FILE, WEEKLY_STATS_FILE
 from services.hf import HFService
 
 
-def hf_callback(command, ack, respond, logger):
+def hf_callback(command, ack, respond, client, logger):
     try:
         ack()
         text = command.get("text", "").strip()
         channel_id = command["channel_id"]
+
+        if text == "data":
+            files = []
+            for path in [DATABASE_FILE, WEEKLY_STATS_FILE]:
+                if path.exists():
+                    files.append({"file": str(path), "title": path.name})
+            if not files:
+                respond("No data files found.")
+                return
+            client.files_upload_v2(
+                channel=channel_id,
+                file_uploads=files,
+                initial_comment="📊 Here are the current data files:",
+            )
+            return
 
         if text.startswith("subscribe"):
             _, repo_id = text.split(maxsplit=1)
@@ -50,7 +65,8 @@ def hf_callback(command, ack, respond, logger):
             "Usage:\n"
             " • `/hf now`\n"
             " • `/hf subscribe <model/organization id>`\n"
-            " • `/hf unsubscribe <model/organization id>`"
+            " • `/hf unsubscribe <model/organization id>`\n"
+            " • `/hf data`"
         )
 
     except Exception as e:
