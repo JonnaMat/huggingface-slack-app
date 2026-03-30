@@ -15,9 +15,10 @@ def _week_key():
     return (datetime.now() - timedelta(days=datetime.now().weekday())).strftime("%Y-W%W")
 
 
-_BASE_DIR = Path(__file__).resolve().parent.parent
-DATABASE_FILE = _BASE_DIR / "database.json"
-WEEKLY_STATS_FILE = _BASE_DIR / "weekly_stats.json"
+_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+_DATA_DIR.mkdir(exist_ok=True)
+DATABASE_FILE = _DATA_DIR / "database.json"
+WEEKLY_STATS_FILE = _DATA_DIR / "weekly_stats.json"
 
 
 class SubscriptionStore:

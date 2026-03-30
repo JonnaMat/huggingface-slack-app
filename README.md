@@ -171,6 +171,21 @@ You should see:
 ⚡ Bolt app is running on Socket Mode!
 ```
 
+### Alternative: Run with Docker
+
+Build and run the app as a container:
+
+```bash
+# Build the image
+docker build -f docker/Dockerfile -t huggingface-slack-app .
+
+# Run the container
+docker run -d \
+  -e SLACK_BOT_TOKEN=xoxb-your-bot-token-here \
+  -e SLACK_APP_TOKEN=xapp-your-app-level-token-here \
+  huggingface-slack-app
+```
+
 ### 7. Invite the bot to a channel
 
 In Slack, run:

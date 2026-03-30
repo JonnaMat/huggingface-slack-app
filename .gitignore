@@ -38,6 +38,6 @@ logs/
 *.db
 .pytype/
 .idea/
-database.json
-weekly_stats.json
+data/
 uv.lock
+docker/build_and_push.sh
