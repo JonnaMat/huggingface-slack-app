@@ -186,6 +186,16 @@ docker run -d \
   huggingface-slack-app
 ```
 
+### CI/CD: Automatic Docker Builds
+
+A GitHub Actions workflow automatically builds and pushes a Docker image to the [GitHub Container Registry](https://ghcr.io) on every push to `master`. You can also trigger it manually via `workflow_dispatch`.
+
+The image is available at:
+
+```
+ghcr.io/<owner>/huggingface-slack-app:latest
+```
+
 ### 7. Invite the bot to a channel
 
 In Slack, run:
@@ -255,6 +265,12 @@ huggingface-slack-app/
 │
 ├── persistence/                    # Data storage layer
 │   └── subscription_store.py       # JSON file storage with FileLock
+│
+├── docker/
+│   └── Dockerfile                  # Container image definition
+│
+├── .github/workflows/
+│   └── docker.yml                  # CI: build & push to GitHub Container Registry
 ```
 
 ---
