@@ -50,6 +50,7 @@ class OrganizationStatistics:
     num_followers: int = 0
     num_models: int = 0
     total_downloads: int = 0
+    model_downloads: dict[str, int] = field(default_factory=dict)
 
     def __str__(self):
         followers_count = (

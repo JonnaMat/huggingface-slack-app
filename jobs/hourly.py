@@ -143,12 +143,45 @@ def _organization_top_models_updates(
         app.client.chat_postMessage(channel=channel_id, text=message)
 
 
+_SIGNIFICANT_INCREASE_PCT = 0.10  # 10% increase in 30-day downloads
+_SIGNIFICANT_INCREASE_MIN = 100   # minimum absolute increase to filter noise
+
+
+def _organization_model_download_updates(
+    app,
+    channel_id: str,
+    old_stats: OrganizationStatistics,
+    new_stats: OrganizationStatistics,
+    subscribed_repos: list[str],
+) -> None:
+    old_downloads = old_stats.model_downloads or {}
+    new_downloads = new_stats.model_downloads or {}
+
+    for model_id, new_count in new_downloads.items():
+        if model_id in subscribed_repos:
+            continue
+        old_count = old_downloads.get(model_id)
+        if old_count is None or old_count == 0:
+            continue
+        increase = new_count - old_count
+        if increase < _SIGNIFICANT_INCREASE_MIN:
+            continue
+        pct = increase / old_count
+        if pct >= _SIGNIFICANT_INCREASE_PCT:
+            message = (
+                f":chart_with_upwards_trend: `{model_id}` downloads surged by "
+                f"{pct:.0%} (+{increase:,}) — now at {new_count:,} downloads (30d)"
+            )
+            app.client.chat_postMessage(channel=channel_id, text=message)
+
+
 def organization_updates(
     app,
     channel_id: str,
     hf_service: HFService,
     old_stats: OrganizationStatistics,
     new_stats: OrganizationStatistics,
+    subscribed_repos: list[str],
 ) -> None:
 
     _organization_followers_updates(app, channel_id, old_stats, new_stats)
@@ -156,6 +189,8 @@ def organization_updates(
     _organization_models_updates(app, channel_id, hf_service, old_stats, new_stats)
 
     _organization_top_models_updates(app, channel_id, old_stats, new_stats)
+
+    _organization_model_download_updates(app, channel_id, old_stats, new_stats, subscribed_repos)
 
 
 def check_for_updates(app):
@@ -175,7 +210,7 @@ def check_for_updates(app):
                         new_stats = hf_service.get_organization_statistics(repo_id)
                         weekly_store.record_followers(repo_id, new_stats.num_followers)
                         weekly_store.record_downloads(repo_id, new_stats.total_downloads)
-                        organization_updates(app, channel_id, hf_service, old_stats, new_stats)
+                        organization_updates(app, channel_id, hf_service, old_stats, new_stats, repos)
                     else:
                         new_stats = hf_service.get_model_statistics(repo_id)
                         model_updates(app, channel_id, old_stats, new_stats)

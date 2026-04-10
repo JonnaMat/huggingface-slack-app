@@ -63,6 +63,10 @@ class HFService:
             for model_info in all_models[:3]
         ]
         total_downloads = sum(model_info.downloads or 0 for model_info in all_models)
+        model_downloads = {
+            model_info.id: model_info.downloads or 0
+            for model_info in all_models
+        }
 
         return OrganizationStatistics(
             repo_id=repo_id,
@@ -71,4 +75,5 @@ class HFService:
             num_models=num_models,
             top_three_models=top_three_models,
             total_downloads=total_downloads,
+            model_downloads=model_downloads,
         )
