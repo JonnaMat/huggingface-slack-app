@@ -333,11 +333,3 @@ cp .env.example .env   # (or create .env manually)
 ## 📄 License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-## 🙏 Acknowledgements
-
-- [Slack Bolt](https://tools.slack.com/automation) — the Python framework that powers this app
-- [HuggingFace Hub](https://huggingface.co/docs/hub) — for the API that makes this all possible
-- All contributors who help improve this project
